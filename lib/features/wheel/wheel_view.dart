@@ -1,34 +1,24 @@
-class AnimatedWheel extends StatefulWidget {
-  const AnimatedWheel({super.key});
-}
-  @override
-  State<AnimatedWheel> createState() => _AnimatedWheelState();
-}
+import 'package:flutter/material.dart';
 
-class _AnimatedWheelState extends State<AnimatedWheel>
-    with SingleTickerProviderStateMixin {
-//  late final AnimationController _controller;
-//
-//  @override
-//  void initState() {
-//    super.initState();
-//    _controller = AnimationController(
-//      duration: const Duration(seconds: 5),
-//      vsync: this,
-//    )..repeat();
-//  }
-//
-//  @override
-//  void dispose() {
-//    _controller.dispose();
-//    super.dispose();
-//  }
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return RotationTransition(
-//      turns: _controller,
-//      child: Image.asset('assets/wheel.png'),
-//    );
-//  }
+class AnimatedWheel extends StatelessWidget {
+  const AnimatedWheel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 200,
+        height: 200,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.deepPurple,
+        ),
+        alignment: Alignment.center,
+        child: const Text(
+          'Wheel',
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
+      ),
+    );
+  }
 }
