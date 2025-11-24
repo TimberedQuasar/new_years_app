@@ -7,8 +7,8 @@ class AnimatedWheel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 200,
-        height: 200,
+        width: 300,
+        height: 300,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.deepPurple,

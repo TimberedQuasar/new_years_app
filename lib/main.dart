@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_sylwester/features/countdown/countdown_banner.dart';
+import 'package:where_sylwester/features/notifications/winner_is.dart';
 import 'package:where_sylwester/features/wheel/wheel_view.dart';
 
 void main() {
@@ -39,14 +40,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const CountdownBanner(),
-              const SizedBox(height: 24),
+              //const SizedBox(height: 5),
               Expanded(child: Stack(children: [AnimatedWheel()])),
-              const SizedBox(height: 24),
+              //const SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
@@ -79,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 24),
-              Text("Hello", textAlign: TextAlign.center),
+              WinnerIs(),
             ],
           ),
         ),
