@@ -37,25 +37,51 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Center(child: Text(widget.title)),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-          children: [
-            CountdownBanner(),
-            Expanded(child: Stack(children: [AnimatedWheel()])),
-            Padding(
-              padding: EdgeInsetsGeometry.all(20),
-              child: Row(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const CountdownBanner(),
+              const SizedBox(height: 24),
+              Expanded(child: Stack(children: [AnimatedWheel()])),
+              const SizedBox(height: 24),
+              Row(
                 children: [
-                  Expanded(child: TextField()),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Dodaj miejscowość",
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 14,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(width: 12),
                   //ElevatedButton(onPressed: set, child: child)
                 ],
               ),
-            ),
-            SizedBox(height: 24),
-            Text("Hello"),
-          ],
+              SizedBox(height: 24),
+              Text("Hello", textAlign: TextAlign.center),
+            ],
+          ),
         ),
       ),
     );
