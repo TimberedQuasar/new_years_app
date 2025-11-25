@@ -21,7 +21,10 @@ class AnimatedWheel extends StatelessWidget {
       children: [
         CustomPaint(
           size: Size.square(size),
-          painter: WheelPainter(items: items, highlightIndex: selectedIndex),
+          painter: WheelPainter(
+            items: items,
+            highlightIndex: selectedIndex,
+          ),
         ),
         Positioned(
           top: 8,

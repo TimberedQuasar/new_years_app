@@ -33,6 +33,18 @@ class WheelPainter extends CustomPainter {
     }
 
     final sweep = 2 * pi / items.length;
+    final labelRadius = radius * 0.65;
+    final textPainter = TextPainter(
+      textAlign: TextAlign.center,
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+      ellipsis: '...',
+    );
+    const textStyle = TextStyle(
+      color: Colors.white,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    );
     var start = -pi / 2; // start at top
     for (var i = 0; i < items.length; i++) {
       final paint = Paint()
@@ -47,6 +59,19 @@ class WheelPainter extends CustomPainter {
           ..strokeWidth = 4;
         canvas.drawArc(rect.deflate(2), start, sweep, true, border);
       }
+
+      // Draw label rotated to the middle of the slice.
+      final midAngle = start + sweep / 2;
+      textPainter.text = TextSpan(text: items[i], style: textStyle);
+      textPainter.layout(maxWidth: labelRadius);
+      canvas.save();
+      canvas.translate(center.dx, center.dy);
+      canvas.rotate(midAngle);
+      textPainter.paint(
+        canvas,
+        Offset(-textPainter.width / 2, -labelRadius),
+      );
+      canvas.restore();
 
       start += sweep;
     }
