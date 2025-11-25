@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_sylwester/features/countdown/countdown_banner.dart';
+import 'package:where_sylwester/features/input/location_input.dart';
 import 'package:where_sylwester/features/notifications/winner_is.dart';
 import 'package:where_sylwester/features/wheel/wheel_view.dart';
 
@@ -33,55 +34,32 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Center(child: Text(widget.title)),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const CountdownBanner(),
-              //const SizedBox(height: 5),
-              Expanded(child: Stack(children: [AnimatedWheel()])),
-              //const SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Dodaj miejscowość",
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).dividerColor,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).dividerColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  //ElevatedButton(onPressed: set, child: child)
-                ],
-              ),
-              SizedBox(height: 24),
-              WinnerIs(),
-            ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Center(child: Text(widget.title)),
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const CountdownBanner(),
+                //const SizedBox(height: 5),
+                Expanded(child: Stack(children: [AnimatedWheel()])),
+                //const SizedBox(height: 24),
+                LocationInput(
+                  enabled: true, // ustaw na false po deadlinie
+                  onSubmit: (value) {
+                    // TODO: dodaj do listy miejsc i odśwież koło
+                  },
+                ),
+                SizedBox(height: 24),
+                WinnerIs(),
+              ],
+            ),
           ),
         ),
       ),
