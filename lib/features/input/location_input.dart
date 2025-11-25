@@ -8,13 +8,15 @@ class LocationInput extends StatefulWidget {
     this.initialValue = '',
     this.hintText = 'Dodaj miejscowość',
     this.buttonText = 'Zapisz',
+    this.errorText,
   });
 
-  final void Function(String value) onSubmit;
+  final Future<bool> Function(String value) onSubmit;
   final bool enabled;
   final String initialValue;
   final String hintText;
   final String buttonText;
+  final String? errorText;
 
   @override
   State<LocationInput> createState() => _LocationInputState();
@@ -37,72 +39,92 @@ class _LocationInputState extends State<LocationInput> {
     super.dispose();
   }
 
-  void _handleSubmit() {
+  Future<void> _handleSubmit() async {
     final text = _controller.text.trim();
     if (text.isEmpty || !widget.enabled) return;
-    widget.onSubmit(text);
+    final ok = await widget.onSubmit(text);
     _controller.clear();
     _focusNode.requestFocus();
+    if (!ok) {
+      // można dodać feedback jeśli potrzeba
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Expanded(
-          child: TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            enabled: widget.enabled,
-            onSubmitted: (_) => _handleSubmit(),
-            decoration: InputDecoration(
-              hintText: widget.hintText,
-              filled: true,
-              fillColor: widget.enabled
-                  ? Colors.white
-                  : theme.disabledColor.withValues(
-                      alpha: 1.0,
-                      red: 0.2588,
-                      green: 0.6471,
-                      blue: 0.9608,
+        if (widget.errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              widget.errorText!,
+              style: TextStyle(
+                color: theme.colorScheme.error,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                focusNode: _focusNode,
+                enabled: widget.enabled,
+                onSubmitted: (_) => _handleSubmit(),
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  filled: true,
+                  fillColor: widget.enabled
+                      ? Colors.white
+                      : theme.disabledColor.withValues(
+                          alpha: 1.0,
+                          red: 0.2588,
+                          green: 0.6471,
+                          blue: 0.9608,
+                        ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: theme.dividerColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: theme.dividerColor),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: theme.disabledColor.withValues(
+                        alpha: 1.0,
+                        red: 0.2588,
+                        green: 0.6471,
+                        blue: 0.9608,
+                      ),
                     ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: theme.dividerColor),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: theme.dividerColor),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: theme.disabledColor.withValues(
-                    alpha: 1.0,
-                    red: 0.2588,
-                    green: 0.6471,
-                    blue: 0.9608,
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        ElevatedButton(
-          onPressed: widget.enabled ? _handleSubmit : null,
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+            const SizedBox(width: 12),
+            ElevatedButton(
+              onPressed: widget.enabled ? _handleSubmit : null,
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(widget.buttonText),
             ),
-          ),
-          child: Text(widget.buttonText),
+          ],
         ),
       ],
     );

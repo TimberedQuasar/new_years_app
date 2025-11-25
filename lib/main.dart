@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:where_sylwester/data/city_validator.dart';
 import 'package:where_sylwester/data/local_store.dart';
 import 'package:where_sylwester/features/countdown/countdown_banner.dart';
 import 'package:where_sylwester/features/input/location_input.dart';
@@ -35,7 +36,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _store = LocalStore();
+  final _cityValidator = CityValidator();
   List<String> _locations = [];
+  String? _errorText;
 
   @override
   void initState() {
@@ -48,11 +51,33 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() => _locations = loaded);
   }
 
-  Future<void> _addLocation(String value) async {
-    if (value.isEmpty) return;
-    await _store.addLocation(value);
+  Future<bool> _addLocation(String value) async {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return false;
+
+    if (!_cityValidator.isFormatValid(trimmed)) {
+      setState(() {
+        _errorText =
+            'Niepoprawna nazwa. Użyj liter (PL), spacji lub myślnika.';
+      });
+      return false;
+    }
+
+    final exists = await _cityValidator.existsInPoland(trimmed);
+    if (!exists) {
+      setState(() {
+        _errorText = 'Miasto nie znalezione w Polsce.';
+      });
+      return false;
+    }
+
+    await _store.addLocation(trimmed);
     final updated = await _store.loadLocations();
-    setState(() => _locations = updated);
+    setState(() {
+      _locations = updated;
+      _errorText = null;
+    });
+    return true;
   }
 
   @override
@@ -79,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
               LocationInput(
                 enabled: true, // ustaw na false po deadlinie
                 onSubmit: _addLocation,
+                errorText: _errorText,
               ),
               const SizedBox(height: 24),
               const WinnerIs(),
