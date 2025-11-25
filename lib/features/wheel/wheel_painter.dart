@@ -42,7 +42,7 @@ class WheelPainter extends CustomPainter {
     );
     const textStyle = TextStyle(
       color: Colors.white,
-      fontSize: 14,
+      fontSize: 16, // większa czcionka nazw miast
       fontWeight: FontWeight.w600,
     );
     var start = -pi / 2; // start at top
@@ -60,16 +60,16 @@ class WheelPainter extends CustomPainter {
         canvas.drawArc(rect.deflate(2), start, sweep, true, border);
       }
 
-      // Draw label rotated to the middle of the slice.
+      // Draw label along the radius (center -> outside).
       final midAngle = start + sweep / 2;
       textPainter.text = TextSpan(text: items[i], style: textStyle);
-      textPainter.layout(maxWidth: labelRadius);
+      textPainter.layout(maxWidth: radius);
       canvas.save();
       canvas.translate(center.dx, center.dy);
       canvas.rotate(midAngle);
       textPainter.paint(
         canvas,
-        Offset(-textPainter.width / 2, -labelRadius),
+        Offset(labelRadius - textPainter.width / 2, -textPainter.height / 2),
       );
       canvas.restore();
 
